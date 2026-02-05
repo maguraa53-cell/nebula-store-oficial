@@ -1,188 +1,130 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Nebula Store - Official Website</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<title>Nebola Store</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{
- font-family:Inter,Arial;
- background:linear-gradient(120deg,#020617,#0f172a,#020617);
- color:#e5e7eb;
-}
-header{
- padding:80px 10%;
- text-align:center;
-}
-h1{font-size:64px;margin-bottom:20px}
-.subtitle{font-size:22px;color:#9ca3af}
-.btn{
- background:#6366f1;
- padding:14px 28px;
- border-radius:8px;
- color:white;
- text-decoration:none;
- margin:10px;
- display:inline-block;
- transition:0.3s;
-}
-.btn:hover{background:#4f46e5}
-section{
- padding:80px 10%;
-}
-.grid{
- display:grid;
- grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
- gap:30px;
-}
-.card{
- background:#0b1220;
- padding:30px;
- border-radius:15px;
- box-shadow:0 0 20px rgba(0,0,0,0.4);
-}
-.card h3{margin-bottom:10px}
-footer{
- background:#020617;
- padding:40px;
- text-align:center;
- color:#9ca3af;
-}
-.lang-switch{
- position:fixed;
- top:20px;
- right:20px;
-}
-select{
- padding:8px;
- border-radius:6px;
- background:#111827;
- color:white;
- border:none;
-}
-@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-header,section,.card{animation:fadeUp 0.8s ease}
-.card{transition:transform .3s,box-shadow .3s}
-.card:hover{transform:translateY(-8px);box-shadow:0 0 30px rgba(99,102,241,.4)}
+body {margin:0;font-family:'Segoe UI',sans-serif;background:#121212;color:#e0e0e0;}
+header{display:flex;justify-content:space-between;align-items:center;padding:15px 20px;background:#1f1f1f;box-shadow:0 2px 5px rgba(0,0,0,0.5);}
+.logo{font-size:26px;font-weight:bold;}
+nav{display:flex;padding:10px;gap:10px;background:#1a1a1a;}
+button{background:#0078d7;border:none;color:white;padding:8px 14px;border-radius:5px;cursor:pointer;font-weight:bold;transition:0.3s;}
+button:hover{background:#005fa3;transform:scale(1.05);}
+.container{padding:20px;}
+.card{background:#1e1e1e;padding:15px;border-radius:10px;margin-bottom:15px;box-shadow:0 2px 8px rgba(0,0,0,0.7);transition:all 0.3s ease;opacity:0;transform:translateY(20px);}
+.card.show{opacity:1;transform:translateY(0);}
+.card img{max-width:100%;border-radius:5px;margin-bottom:10px;transition:0.3s;}
+.card img:hover{transform:scale(1.05);}
+input, textarea{width:100%;padding:8px;border-radius:5px;border:1px solid #333;margin-top:5px;background:#2a2a2a;color:white;}
+.checkbox{margin-top:10px;}
+footer{text-align:center;padding:15px;opacity:0.6;background:#1f1f1f;}
+#searchInput{padding:8px;width:50%;border-radius:5px;border:1px solid #333;background:#2a2a2a;color:white;margin-bottom:15px;}
+form label{display:block;margin-top:10px;}
 </style>
 </head>
 <body>
-
-<div class="lang-switch">
-<select onchange="setLang(this.value)">
-<option value="en">English</option>
-<option value="pt">Português</option>
-<option value="es">Español</option>
-</select>
-</div>
-
 <header>
-<h1 id="title">Nebula Store</h1>
-<p class="subtitle" id="subtitle">Open Source Desktop App Marketplace</p>
-<br>
-<a class="btn" href="https://github.com/maguraa53-cell/nebula-store-oficial">GitHub Repository</a>
-<a class="btn" href="#features">Features</a>
+    <div class="logo">Nebola Store</div>
 </header>
+<nav>
+    <button onclick="showSection('storeSection')">Loja</button>
+    <button onclick="showSection('publishSection')">Publicar</button>
+</nav>
 
-<section>
-<h2 id="aboutTitle">About</h2>
-<p id="aboutText">
-Nebula Store is a lightweight desktop marketplace where developers can publish and share applications using external links. Users can browse freely without accounts.
-</p>
-</section>
+<div class="container">
+    <!-- Loja -->
+    <div id="storeSection">
+        <h2>🛒 Loja</h2>
+        <input type="text" id="searchInput" placeholder="Pesquisar apps..." onkeyup="searchApps()">
+        <div id="store"></div>
+    </div>
 
-<section id="features">
-<h2 id="featuresTitle">Features</h2>
-<div class="grid">
-<div class="card"><h3 id="f1">Free Browsing</h3><p id="f1d">No login required</p></div>
-<div class="card"><h3 id="f2">Publish Apps</h3><p id="f2d">Share your projects</p></div>
-<div class="card"><h3 id="f3">Source Code Required</h3><p id="f3d">Transparency</p></div>
-<div class="card"><h3 id="f4">External Hosting</h3><p id="f4d">GitHub, Drive, etc</p></div>
-<div class="card"><h3 id="f5">Search Engine</h3><p id="f5d">Find apps easily</p></div>
-<div class="card"><h3 id="f6">Modern UI</h3><p id="f6d">Modern design</p></div>
+    <!-- Publicar -->
+    <div id="publishSection" style="display:none;">
+        <h2>📦 Publicar App</h2>
+        <form id="publishForm">
+            <label>Nome do App</label>
+            <input id="appName" placeholder="Nome do App" required>
+            <label>Descrição do App</label>
+            <textarea id="appDesc" placeholder="Descrição do App" required></textarea>
+            <label>URL da Imagem (opcional)</label>
+            <input id="appImg" placeholder="https://...">
+            <label>Link Google Drive ou GitHub</label>
+            <input id="appLink" placeholder="https://..." required>
+            <div class="checkbox">
+                <input type="checkbox" id="terms" required> Aceito termos de código e antipirataria
+            </div>
+            <button type="button" onclick="publishApp()">Publicar</button>
+        </form>
+    </div>
 </div>
-</section>
 
-<section>
-<h2 id="securityTitle">Security</h2>
-<p id="securityText">
-Nebula Store does not host files and does not collect personal data. Always scan downloaded files.
-</p>
-</section>
-
-<section>
-<h2 id="termsTitle">Terms of Use</h2>
-<p id="termsText">
-Malware, spyware, ransomware and illegal content are forbidden.
-</p>
-</section>
-
-<footer>
-<p>© 2026 Nebula Project</p>
-<p>Created by Maguraa</p>
-</footer>
+<footer>Nebola Store © 2026</footer>
 
 <script>
-const data={
- en:{
-  title:"Nebula Store",
-  subtitle:"Open Source Desktop App Marketplace",
-  aboutTitle:"About",
-  aboutText:"Nebula Store is a lightweight desktop marketplace where developers can publish and share applications using external links. Users can browse freely without accounts.",
-  featuresTitle:"Features",
-  f1:"Free Browsing",f1d:"No login required",
-  f2:"Publish Apps",f2d:"Share your projects",
-  f3:"Source Code Required",f3d:"Transparency",
-  f4:"External Hosting",f4d:"GitHub, Drive, etc",
-  f5:"Search Engine",f5d:"Find apps easily",
-  f6:"Steam-like UI",f6d:"Modern design",
-  securityTitle:"Security",
-  securityText:"Nebula Store does not host files and does not collect personal data. Always scan downloaded files.",
-  termsTitle:"Terms of Use",
-  termsText:"Malware, spyware, ransomware and illegal content are forbidden."
- },
- pt:{
-  title:"Nebula Store",
-  subtitle:"Loja Desktop Open Source",
-  aboutTitle:"Sobre",
-  aboutText:"Nebula Store é uma loja desktop leve onde desenvolvedores podem publicar e compartilhar aplicativos usando links externos. Usuários navegam sem login.",
-  featuresTitle:"Recursos",
-  f1:"Navegação Livre",f1d:"Sem login",
-  f2:"Publicar Apps",f2d:"Compartilhe projetos",
-  f3:"Código Fonte Obrigatório",f3d:"Transparência",
-  f4:"Hospedagem Externa",f4d:"GitHub, Drive",
-  f5:"Busca",f5d:"Encontre facilmente",
-  f6:"Interface Moderna",f6d:"Design moderno",
-  securityTitle:"Segurança",
-  securityText:"Nebula Store não hospeda arquivos e não coleta dados pessoais.",
-  termsTitle:"Termos de Uso",
-  termsText:"Malware, spyware, ransomware e conteúdo ilegal são proibidos."
- },
- es:{
-  title:"Nebula Store",
-  subtitle:"Tienda Desktop Open Source",
-  aboutTitle:"Acerca",
-  aboutText:"Nebula Store es una tienda ligera donde desarrolladores publican aplicaciones usando enlaces externos.",
-  featuresTitle:"Funciones",
-  f1:"Navegación Libre",f1d:"Sin login",
-  f2:"Publicar Apps",f2d:"Comparte proyectos",
-  f3:"Código Fuente",f3d:"Transparencia",
-  f4:"Hosting Externo",f4d:"GitHub, Drive",
-  f5:"Buscador",f5d:"Encuentra fácil",
-  f6:"Interfaz Moderna",f6d:"Diseño moderno",
-  securityTitle:"Seguridad",
-  securityText:"Nebula Store no aloja archivos ni recopila datos.",
-  termsTitle:"Términos",
-  termsText:"Malware y contenido ilegal prohibido."
- }
-};
+// Array que armazena apps (funciona dentro do próprio código)
+let apps = [
+    {
+        name: "Exemplo App",
+        desc: "Este é um app de exemplo",
+        img: "https://via.placeholder.com/400x200?text=Exemplo",
+        link: "https://github.com"
+    }
+];
 
-function setLang(lang){
- let d=data[lang];
- for(let k in d){document.getElementById(k).innerText=d[k];}
+// Alterna seções
+function showSection(id){
+    ['storeSection','publishSection'].forEach(s => document.getElementById(s).style.display='none');
+    document.getElementById(id).style.display='block';
 }
-</script>
 
+// Publicar app no array
+function publishApp(){
+    const name = document.getElementById('appName').value.trim();
+    const desc = document.getElementById('appDesc').value.trim();
+    const img = document.getElementById('appImg').value.trim() || 'https://via.placeholder.com/400x200?text=No+Image';
+    const link = document.getElementById('appLink').value.trim();
+    const terms = document.getElementById('terms').checked;
+
+    if(!name || !desc || !link || !terms){
+        alert('Preencha todos os campos obrigatórios e aceite os termos!');
+        return;
+    }
+
+    const app = {name, desc, img, link};
+    apps.push(app);
+    renderStore(apps);
+    document.getElementById('publishForm').reset();
+    alert('App publicado localmente!');
+}
+
+// Renderizar apps na Loja
+function renderStore(list){
+    const store = document.getElementById('store');
+    store.innerHTML='';
+    list.forEach(a=>{
+        const card = document.createElement('div');
+        card.className='card';
+        card.innerHTML = `<img src="${a.img}" alt="${a.name}">
+                          <h3>${a.name}</h3>
+                          <p>${a.desc}</p>
+                          <a href="${a.link}" target="_blank"><button>Baixar</button></a>`;
+        store.appendChild(card);
+        setTimeout(()=>card.classList.add('show'),50);
+    });
+}
+
+// Pesquisa
+function searchApps(){
+    const query = document.getElementById('searchInput').value.toLowerCase();
+    const filtered = apps.filter(a => a.name.toLowerCase().includes(query));
+    renderStore(filtered);
+}
+
+// Inicializa
+renderStore(apps);
+showSection('storeSection');
+</script>
 </body>
 </html>

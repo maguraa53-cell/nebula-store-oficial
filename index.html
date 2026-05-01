@@ -1,130 +1,214 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<title>Nebola Store</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-body {margin:0;font-family:'Segoe UI',sans-serif;background:#121212;color:#e0e0e0;}
-header{display:flex;justify-content:space-between;align-items:center;padding:15px 20px;background:#1f1f1f;box-shadow:0 2px 5px rgba(0,0,0,0.5);}
-.logo{font-size:26px;font-weight:bold;}
-nav{display:flex;padding:10px;gap:10px;background:#1a1a1a;}
-button{background:#0078d7;border:none;color:white;padding:8px 14px;border-radius:5px;cursor:pointer;font-weight:bold;transition:0.3s;}
-button:hover{background:#005fa3;transform:scale(1.05);}
-.container{padding:20px;}
-.card{background:#1e1e1e;padding:15px;border-radius:10px;margin-bottom:15px;box-shadow:0 2px 8px rgba(0,0,0,0.7);transition:all 0.3s ease;opacity:0;transform:translateY(20px);}
-.card.show{opacity:1;transform:translateY(0);}
-.card img{max-width:100%;border-radius:5px;margin-bottom:10px;transition:0.3s;}
-.card img:hover{transform:scale(1.05);}
-input, textarea{width:100%;padding:8px;border-radius:5px;border:1px solid #333;margin-top:5px;background:#2a2a2a;color:white;}
-.checkbox{margin-top:10px;}
-footer{text-align:center;padding:15px;opacity:0.6;background:#1f1f1f;}
-#searchInput{padding:8px;width:50%;border-radius:5px;border:1px solid #333;background:#2a2a2a;color:white;margin-bottom:15px;}
-form label{display:block;margin-top:10px;}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tópico Financeiro | Pro</title>
+    <!-- Tailwind para Design Ágil -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Animate.css para as animações de entrada -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <!-- Ícones -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #050505;
+            color: #e5e7eb;
+            overflow-x: hidden;
+        }
+
+        .glass {
+            background: rgba(22, 27, 34, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(48, 54, 61, 0.5);
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, #58a6ff, #bc8cff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Esconder seções antes do login */
+        #app-content { display: none; }
+        
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    </style>
 </head>
 <body>
-<header>
-    <div class="logo">Nebola Store</div>
-</header>
-<nav>
-    <button onclick="showSection('storeSection')">Loja</button>
-    <button onclick="showSection('publishSection')">Publicar</button>
-</nav>
 
-<div class="container">
-    <!-- Loja -->
-    <div id="storeSection">
-        <h2>🛒 Loja</h2>
-        <input type="text" id="searchInput" placeholder="Pesquisar apps..." onkeyup="searchApps()">
-        <div id="store"></div>
+    <!-- TELA DE LOGIN OBRIGATÓRIO -->
+    <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-black">
+        <div class="glass p-10 rounded-2xl w-full max-w-md animate__animated animate__zoomIn text-center">
+            <h1 class="text-4xl font-bold gradient-text mb-2">Tópico</h1>
+            <p class="text-gray-400 mb-8">Faça login para gerenciar suas finanças</p>
+            
+            <button onclick="loginFake()" class="w-full flex items-center justify-center gap-3 bg-white text-black font-bold py-3 rounded-lg hover:bg-gray-200 transition-all duration-300">
+                <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" width="20" alt="Google">
+                Entrar com Google
+            </button>
+            
+            <p class="mt-6 text-xs text-gray-500">Ao entrar, você concorda com a nossa política de privacidade criptografada.</p>
+        </div>
     </div>
 
-    <!-- Publicar -->
-    <div id="publishSection" style="display:none;">
-        <h2>📦 Publicar App</h2>
-        <form id="publishForm">
-            <label>Nome do App</label>
-            <input id="appName" placeholder="Nome do App" required>
-            <label>Descrição do App</label>
-            <textarea id="appDesc" placeholder="Descrição do App" required></textarea>
-            <label>URL da Imagem (opcional)</label>
-            <input id="appImg" placeholder="https://...">
-            <label>Link Google Drive ou GitHub</label>
-            <input id="appLink" placeholder="https://..." required>
-            <div class="checkbox">
-                <input type="checkbox" id="terms" required> Aceito termos de código e antipirataria
+    <!-- APP PRINCIPAL -->
+    <div id="app-content" class="min-h-screen p-4 md:p-8 animate__animated animate__fadeIn">
+        
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-8">
+            <div>
+                <h2 class="text-gray-400 text-sm">Bem-vindo de volta,</h2>
+                <h1 id="user-name" class="text-2xl font-bold">Gabriel Ramos</h1>
             </div>
-            <button type="button" onclick="publishApp()">Publicar</button>
-        </form>
+            <button onclick="location.reload()" class="text-gray-500 hover:text-white transition">Sair</button>
+        </header>
+
+        <!-- DASHBOARD INTELIGENTE (Cards) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="glass p-6 rounded-xl animate__animated animate__fadeInUp">
+                <span class="text-gray-500 text-sm">Saldo Consolidado</span>
+                <div class="text-3xl font-bold text-green-400 mt-2" id="res-saldo">R$ 0,00</div>
+                <div class="text-xs text-green-500 mt-1">↑ 12% em relação ao mês anterior</div>
+            </div>
+            <div class="glass p-6 rounded-xl animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
+                <span class="text-gray-500 text-sm">Gastos Previstos</span>
+                <div class="text-3xl font-bold text-red-400 mt-2" id="res-gastos">R$ 0,00</div>
+                <div class="w-full bg-gray-800 h-2 rounded-full mt-3">
+                    <div id="health-bar" class="bg-blue-500 h-2 rounded-full" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="glass p-6 rounded-xl animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+                <span class="text-gray-500 text-sm">Meta: <span id="res-obj-nome">Nenhum</span></span>
+                <div class="text-3xl font-bold text-blue-400 mt-2" id="res-tempo-meta">--</div>
+                <div id="res-msg-meta" class="text-xs text-gray-400 mt-1">Defina um objetivo abaixo</div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- PLANEJAMENTO E REGISTRO -->
+            <div class="space-y-6">
+                <section class="glass p-6 rounded-xl">
+                    <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                        💰 Controle de Fluxo
+                    </h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex flex-col">
+                            <label class="text-xs text-gray-500 mb-1">Renda Bruta</label>
+                            <input type="number" id="renda" oninput="update()" class="bg-black border border-gray-700 rounded-lg p-3 focus:border-blue-500 outline-none">
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="text-xs text-gray-500 mb-1">Impostos/Taxas</label>
+                            <input type="number" id="imposto" oninput="update()" class="bg-black border border-gray-700 rounded-lg p-3 focus:border-blue-500 outline-none">
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="text-xs text-gray-500 mb-1">Água/Luz/Internet</label>
+                            <input type="number" id="contas" oninput="update()" class="bg-black border border-gray-700 rounded-lg p-3 focus:border-blue-500 outline-none">
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="text-xs text-gray-500 mb-1">Mercado/Feira</label>
+                            <input type="number" id="mercado" oninput="update()" class="bg-black border border-gray-700 rounded-lg p-3 focus:border-blue-500 outline-none">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CARTÃO DE CRÉDITO -->
+                <section class="glass p-6 rounded-xl border-l-4 border-yellow-500">
+                    <h3 class="text-lg font-semibold mb-4 text-yellow-500">💳 Cartão de Crédito</h3>
+                    <div class="flex justify-between mb-2">
+                        <span class="text-sm text-gray-400">Limite Utilizado</span>
+                        <span id="card-value" class="text-sm font-bold">R$ 0,00</span>
+                    </div>
+                    <input type="range" id="cartao" min="0" max="5000" value="0" oninput="update()" class="w-full accent-yellow-500">
+                </section>
+            </div>
+
+            <!-- METAS E INTELIGÊNCIA -->
+            <div class="space-y-6">
+                <section class="glass p-6 rounded-xl border-l-4 border-blue-500">
+                    <h3 class="text-lg font-semibold mb-4 text-blue-500">🎯 Objetivos Estratégicos</h3>
+                    <div class="space-y-4">
+                        <input type="text" id="obj-nome" placeholder="Nome do objetivo (Ex: Notebook Novo)" oninput="update()" class="w-full bg-black border border-gray-700 rounded-lg p-3 outline-none">
+                        <div class="grid grid-cols-2 gap-4">
+                            <input type="number" id="obj-valor" placeholder="Valor total R$" oninput="update()" class="bg-black border border-gray-700 rounded-lg p-3 outline-none">
+                            <input type="number" id="obj-pct" placeholder="% para poupar" oninput="update()" class="bg-black border border-gray-700 rounded-lg p-3 outline-none">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- INSIGHTS AUTOMÁTICOS -->
+                <section class="glass p-6 rounded-xl bg-gradient-to-br from-blue-900/20 to-transparent">
+                    <h3 class="text-lg font-semibold mb-2">🤖 Insights da IA</h3>
+                    <p id="ai-insight" class="text-sm text-gray-400">Insira seus dados para receber sugestões de economia...</p>
+                </section>
+            </div>
+
+        </div>
     </div>
-</div>
 
-<footer>Nebola Store © 2026</footer>
+    <script>
+        // Lógica de Login Obrigatório
+        function loginFake() {
+            const btn = document.querySelector('button');
+            btn.innerHTML = "Autenticando...";
+            setTimeout(() => {
+                document.getElementById('login-screen').classList.add('animate__animated', 'animate__fadeOut');
+                setTimeout(() => {
+                    document.getElementById('login-screen').style.display = 'none';
+                    document.getElementById('app-content').style.display = 'block';
+                }, 500);
+            }, 1500);
+        }
 
-<script>
-// Array que armazena apps (funciona dentro do próprio código)
-let apps = [
-    {
-        name: "Exemplo App",
-        desc: "Este é um app de exemplo",
-        img: "https://via.placeholder.com/400x200?text=Exemplo",
-        link: "https://github.com"
-    }
-];
+        // Sistema de Cálculos e UX
+        function update() {
+            const renda = parseFloat(document.getElementById('renda').value) || 0;
+            const imposto = parseFloat(document.getElementById('imposto').value) || 0;
+            const contas = parseFloat(document.getElementById('contas').value) || 0;
+            const mercado = parseFloat(document.getElementById('mercado').value) || 0;
+            const cartao = parseFloat(document.getElementById('cartao').value) || 0;
 
-// Alterna seções
-function showSection(id){
-    ['storeSection','publishSection'].forEach(s => document.getElementById(s).style.display='none');
-    document.getElementById(id).style.display='block';
-}
+            const totalDespesas = contas + mercado + cartao;
+            const rendaLiquida = renda - imposto;
+            const saldo = rendaLiquida - totalDespesas;
 
-// Publicar app no array
-function publishApp(){
-    const name = document.getElementById('appName').value.trim();
-    const desc = document.getElementById('appDesc').value.trim();
-    const img = document.getElementById('appImg').value.trim() || 'https://via.placeholder.com/400x200?text=No+Image';
-    const link = document.getElementById('appLink').value.trim();
-    const terms = document.getElementById('terms').checked;
+            // UI
+            document.getElementById('res-saldo').innerText = `R$ ${saldo.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            document.getElementById('res-gastos').innerText = `R$ ${totalDespesas.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            document.getElementById('card-value').innerText = `R$ ${cartao.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
 
-    if(!name || !desc || !link || !terms){
-        alert('Preencha todos os campos obrigatórios e aceite os termos!');
-        return;
-    }
+            // Barra de Saúde
+            const healthBar = document.getElementById('health-bar');
+            const pctUso = (totalDespesas / (rendaLiquida || 1)) * 100;
+            healthBar.style.width = Math.min(pctUso, 100) + '%';
+            healthBar.className = pctUso > 80 ? 'bg-red-500 h-2 rounded-full' : (pctUso > 50 ? 'bg-yellow-500 h-2 rounded-full' : 'bg-blue-500 h-2 rounded-full');
 
-    const app = {name, desc, img, link};
-    apps.push(app);
-    renderStore(apps);
-    document.getElementById('publishForm').reset();
-    alert('App publicado localmente!');
-}
+            // Lógica de Metas
+            const objNome = document.getElementById('obj-nome').value || "Nenhum";
+            const objValor = parseFloat(document.getElementById('obj-valor').value) || 0;
+            const objPct = parseFloat(document.getElementById('obj-pct').value) || 0;
+            
+            document.getElementById('res-obj-nome').innerText = objNome;
 
-// Renderizar apps na Loja
-function renderStore(list){
-    const store = document.getElementById('store');
-    store.innerHTML='';
-    list.forEach(a=>{
-        const card = document.createElement('div');
-        card.className='card';
-        card.innerHTML = `<img src="${a.img}" alt="${a.name}">
-                          <h3>${a.name}</h3>
-                          <p>${a.desc}</p>
-                          <a href="${a.link}" target="_blank"><button>Baixar</button></a>`;
-        store.appendChild(card);
-        setTimeout(()=>card.classList.add('show'),50);
-    });
-}
-
-// Pesquisa
-function searchApps(){
-    const query = document.getElementById('searchInput').value.toLowerCase();
-    const filtered = apps.filter(a => a.name.toLowerCase().includes(query));
-    renderStore(filtered);
-}
-
-// Inicializa
-renderStore(apps);
-showSection('storeSection');
-</script>
+            if (saldo > 0 && objValor > 0 && objPct > 0) {
+                const aporte = saldo * (objPct / 100);
+                const meses = objValor / aporte;
+                document.getElementById('res-tempo-meta').innerText = meses <= 1 ? `${Math.ceil(meses*30)} Dias` : `${Math.ceil(meses)} Meses`;
+                document.getElementById('res-msg-meta').innerText = `Guardando R$ ${aporte.toFixed(2)} por mês.`;
+                
+                // Insight de IA
+                if(pctUso > 70) {
+                    document.getElementById('ai-insight').innerText = "⚠️ Você está usando muito da sua renda. Tente reduzir o cartão para acelerar seu objetivo de " + objNome + ".";
+                } else {
+                    document.getElementById('ai-insight').innerText = "✅ Ótimo ritmo! Você está financeiramente saudável para conquistar o " + objNome + ".";
+                }
+            }
+        }
+    </script>
 </body>
 </html>
